@@ -126,3 +126,35 @@ GEMINI_API_KEY=
 GEMINI_MODEL=
 VITE_API_URL=
 ```
+
+## Como criar uma chave do Gemini gratuitamente
+
+Para testar a integração com IA localmente, você pode gerar uma chave gratuita na plataforma do Google AI Studio.
+
+### Passo a passo
+
+1. Acesse o Google AI Studio:
+   - https://aistudio.google.com/
+
+2. Faça login com sua conta Google.
+
+3. No painel, clique em "Get API key" ou "Create API key".
+
+4. Crie uma nova chave de API.
+
+5. Copie a chave gerada.
+
+6. No projeto, cole a chave no arquivo .env, na variável:
+
+```env
+GEMINI_API_KEY=sua_chave_aqui
+```
+
+7. Se quiser, use o modelo padrão abaixo:
+
+```env
+GEMINI_MODEL=gemini-2.0-flash
+```
+
+> Importante: algumas chaves podem ter limites de uso gratuito, então para testes simples o fluxo funciona bem. Se a chave não estiver disponível ou exceder o limite, o projeto já possui um fallback local para responder com base no catálogo.
+
