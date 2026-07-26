@@ -1,0 +1,63 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: chatbot-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chatbot_root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chatbot}
+      MYSQL_USER: ${MYSQL_USER:-chatbot}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chatbot_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  php:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chatbot-php
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${MYSQL_DATABASE:-chatbot}
+      DB_USERNAME: ${MYSQL_USER:-chatbot}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-chatbot_password}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/api-rest:/var/www/html
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: chatbot-frontend
+    restart: unless-stopped
+    depends_on:
+      - php
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000/chat}
+    ports:
+      - "5173:5173"
+
+volumes:
+  mysql_data:
+  frontend_node_modules:

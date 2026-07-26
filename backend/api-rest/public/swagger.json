@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Chatbot Alves",
+    "version": "1.0.0",
+    "description": "API para chatbot de atendimento com integração ao Gemini e catálogo de produtos."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Servidor local com Docker"
+    }
+  ],
+  "paths": {
+    "/chat": {
+      "post": {
+        "summary": "Enviar mensagem ao chatbot",
+        "description": "Recebe uma mensagem do cliente e retorna a resposta do atendimento.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["mensagem"],
+                "properties": {
+                  "mensagem": {
+                    "type": "string",
+                    "example": "Qual o preço do Sabonete Facial?"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta do chatbot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resposta": {
+                      "type": "string",
+                      "example": "O produto Sabonete Facial custa R$ 19,90."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Status da API",
+        "description": "Retorna o estado da API e orientações de uso.",
+        "responses": {
+          "200": {
+            "description": "API online"
+          }
+        }
+      }
+    }
+  }
+}

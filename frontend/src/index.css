@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Estilo para esconder a barra de rolagem mas manter a funcionalidade */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
